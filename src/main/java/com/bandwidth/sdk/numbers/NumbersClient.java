@@ -5,6 +5,8 @@ import org.asynchttpclient.AsyncHttpClientConfig;
 import org.asynchttpclient.DefaultAsyncHttpClientConfig;
 import org.asynchttpclient.Realm;
 
+import static org.asynchttpclient.Dsl.asyncHttpClient;
+
 
 public class NumbersClient {
 
