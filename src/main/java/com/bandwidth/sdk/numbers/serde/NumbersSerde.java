@@ -9,11 +9,10 @@ import com.fasterxml.jackson.datatype.jdk8.Jdk8Module;
 
 public class NumbersSerde {
 
-    private static final XmlMapper mapper = new XmlMapper()
-        .registerModule(new Jdk8Module());
+    private static final XmlMapper mapper = new XmlMapper();
 
     public <T> T deserialize(String messageBody, TypeReference<T> clazz) {
-        return catchClientException(() -> mapper.readValue(messageBody, clazz));
+        return catchClientExceptions(() -> mapper.readValue(messageBody, clazz));
     }
 
     public <T> T deserialize(String messageBody, Class<T> clazz) {

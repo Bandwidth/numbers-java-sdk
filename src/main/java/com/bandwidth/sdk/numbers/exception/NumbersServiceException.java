@@ -1,5 +1,6 @@
 package com.bandwidth.sdk.numbers.exception;
 
+import com.bandwidth.sdk.numbers.serde.NumbersSerde;
 import com.bandwidth.sdk.numbers.models.NumbersApiError;
 import org.asynchttpclient.Response;
 
@@ -20,9 +21,7 @@ public class NumbersServiceException extends RuntimeException {
         if (!isSuccessfulHttpStatusCode(apiResponse.getStatusCode())) {
             try {
                 throw new NumbersServiceException(
-                        //TODO: After NumbersSerde() is created, change this to something like this:
-                            //new NumbersSerde().deserialize(apiResponse.getResponseBody(), NumbersApiError.class)
-                        new NumbersApiError()
+                        new NumbersSerde().deserialize(apiResponse.getResponseBody(), NumbersApiError.class)
                 );
             } catch (Exception e) {
                 throw new NumbersClientException("Unknown error response from API: " + apiResponse);
