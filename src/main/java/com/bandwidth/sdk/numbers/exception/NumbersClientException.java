@@ -1,8 +1,7 @@
 package com.bandwidth.sdk.numbers.exception;
-  
+
 
 public class NumbersClientException extends RuntimeException {
-
 
     public NumbersClientException(String message) {
         super(message);

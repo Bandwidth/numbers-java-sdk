@@ -1,27 +1,35 @@
 package com.bandwidth.sdk.numbers.serde;
 
-import static com.bandwidth.sdk.numbers.exception.ExceptionUtils.catchClientExceptions;
-
-import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.dataformat.xml.XmlMapper;
-import com.fasterxml.jackson.datatype.jdk8.Jdk8Module;
+import com.fasterxml.jackson.datatype.guava.GuavaModule;
+
+import static com.bandwidth.sdk.numbers.exception.ExceptionUtils.catchClientExceptions;
 
 
 public class NumbersSerde {
 
-    private static final XmlMapper mapper = new XmlMapper();
+   private NumbersSerde() {
+      // utility class; no instances
+   }
 
-    public <T> T deserialize(String messageBody, TypeReference<T> clazz) {
-        return catchClientExceptions(() -> mapper.readValue(messageBody, clazz));
-    }
+   private static final XmlMapper XML_MAPPER = new XmlMapper();
 
-    public <T> T deserialize(String messageBody, Class<T> clazz) {
-        return catchClientExceptions(() -> mapper.readValue(messageBody, clazz));
-    }
+   static {
+      XML_MAPPER.registerModule(new GuavaModule());
+   }
 
-    public <T> String serialize(T objectToMap) {
-        return catchClientExceptions(() -> mapper.writeValueAsString(objectToMap));
-    }
+   public static <T> T deserialize(String messageBody, Class<T> clazz) {
+      //TODO: Remove this debug message
+      System.out.println(messageBody);
+      return catchClientExceptions(() -> XML_MAPPER.readValue(messageBody, clazz));
+   }
 
+   public static <T> String serialize(T objectToMap) {
+      return catchClientExceptions(() -> {
+         final String s = XML_MAPPER.writeValueAsString(objectToMap);
+         //TODO: Remove this debug message
+         System.out.println(s);
+         return s;
+      });
+   }
 }
-

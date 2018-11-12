@@ -6,7 +6,7 @@ import org.asynchttpclient.Response;
 
 public class NumbersServiceException extends RuntimeException {
 
-    private NumbersApiError error;
+    private final NumbersApiError error;
 
     public NumbersServiceException(NumbersApiError error) {
         super(error.toString());
@@ -21,7 +21,7 @@ public class NumbersServiceException extends RuntimeException {
         if (!isSuccessfulHttpStatusCode(apiResponse.getStatusCode())) {
             try {
                 throw new NumbersServiceException(
-                        new NumbersSerde().deserialize(apiResponse.getResponseBody(), NumbersApiError.class)
+                   NumbersSerde.deserialize(apiResponse.getResponseBody(), NumbersApiError.class)
                 );
             } catch (Exception e) {
                 throw new NumbersClientException("Unknown error response from API: " + apiResponse);
