@@ -1,6 +1,5 @@
 package com.bandwidth.sdk.numbers.serde;
 
-import com.bandwidth.sdk.numbers.models.orders.DebugUtils;
 import com.fasterxml.jackson.dataformat.xml.XmlMapper;
 import com.fasterxml.jackson.datatype.guava.GuavaModule;
 
@@ -24,6 +23,8 @@ public class NumbersSerde {
    }
 
    public static <T> String serialize(T objectToMap) {
-      return catchClientExceptions(() -> MAPPER.writeValueAsString(objectToMap));
+      return catchClientExceptions(() -> {
+         return MAPPER.writeValueAsString(objectToMap);
+      });
    }
 }
