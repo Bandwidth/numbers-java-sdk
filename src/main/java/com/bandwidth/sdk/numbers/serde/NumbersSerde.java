@@ -1,5 +1,6 @@
 package com.bandwidth.sdk.numbers.serde;
 
+import com.bandwidth.sdk.numbers.models.orders.DebugUtils;
 import com.fasterxml.jackson.dataformat.xml.XmlMapper;
 import com.fasterxml.jackson.datatype.guava.GuavaModule;
 
@@ -12,24 +13,17 @@ public class NumbersSerde {
       // utility class; no instances
    }
 
-   private static final XmlMapper XML_MAPPER = new XmlMapper();
+   public static final XmlMapper MAPPER = new XmlMapper();
 
    static {
-      XML_MAPPER.registerModule(new GuavaModule());
+      MAPPER.registerModule(new GuavaModule());
    }
 
    public static <T> T deserialize(String messageBody, Class<T> clazz) {
-      //TODO: Remove this debug message
-      System.out.println(messageBody);
-      return catchClientExceptions(() -> XML_MAPPER.readValue(messageBody, clazz));
+      return catchClientExceptions(() -> MAPPER.readValue(messageBody, clazz));
    }
 
    public static <T> String serialize(T objectToMap) {
-      return catchClientExceptions(() -> {
-         final String s = XML_MAPPER.writeValueAsString(objectToMap);
-         //TODO: Remove this debug message
-         System.out.println(s);
-         return s;
-      });
+      return catchClientExceptions(() -> MAPPER.writeValueAsString(objectToMap));
    }
 }

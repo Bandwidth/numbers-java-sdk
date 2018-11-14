@@ -88,6 +88,10 @@ public abstract class Order implements Quantifiable {
    @JacksonXmlProperty(localName = "ZIPSearchAndOrderType")
    public abstract ZipSearchAndOrderType getZipSearchAndOrderType();
 
+   @Nullable
+   @JacksonXmlProperty(localName = "CombinedSearchAndOrderType")
+   public abstract CombinedSearchAndOrderType getCombinedSearchAndOrderType();
+
    public static ImmutableOrder.Builder builder() {
       return ImmutableOrder.builder();
    }

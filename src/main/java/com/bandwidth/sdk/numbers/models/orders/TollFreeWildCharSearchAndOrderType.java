@@ -8,9 +8,9 @@ import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlRootElement;
 import org.immutables.value.Value;
 
 @Value.Immutable
-@JacksonXmlRootElement(localName = "TollFreeWildCharSearchAndOrderType")
 @JsonSerialize(as = ImmutableTollFreeWildCharSearchAndOrderType.class)
 @JsonDeserialize(as = ImmutableTollFreeWildCharSearchAndOrderType.class)
+@JacksonXmlRootElement(localName = "TollFreeWildCharSearchAndOrderType")
 public abstract class TollFreeWildCharSearchAndOrderType implements Quantifiable {
 
    @JacksonXmlProperty(localName = "TollFreeWildCharPattern")

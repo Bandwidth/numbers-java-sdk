@@ -10,9 +10,9 @@ import org.immutables.value.Value;
 import javax.annotation.Nullable;
 
 @Value.Immutable
-@JacksonXmlRootElement(localName = "NpaNxxSearchAndOrderType")
 @JsonSerialize(as = ImmutableNpaNxxSearchAndOrderType.class)
 @JsonDeserialize(as = ImmutableNpaNxxSearchAndOrderType.class)
+@JacksonXmlRootElement(localName = "NpaNxxSearchAndOrderType")
 public abstract class NpaNxxSearchAndOrderType implements Quantifiable {
 
    @JacksonXmlProperty(localName = "NpaNxx")

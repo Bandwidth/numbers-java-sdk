@@ -7,10 +7,10 @@ import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlRootElement;
 import org.immutables.value.Value;
 
 @Value.Immutable
-@JacksonXmlRootElement
-@JsonSerialize(as = ImmutableError.class)
-@JsonDeserialize(as = ImmutableError.class)
-public abstract class Error {
+@JacksonXmlRootElement(localName = "Error")
+@JsonSerialize(as = ImmutableErrorResponse.class)
+@JsonDeserialize(as = ImmutableErrorResponse.class)
+public abstract class ErrorResponse {
 
    @JacksonXmlProperty(localName = "Code")
    public abstract String getCode();

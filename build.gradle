@@ -1,5 +1,6 @@
 buildscript {
     repositories {
+        mavenLocal()
         mavenCentral()
     }
 
@@ -15,6 +16,9 @@ buildscript {
     }
 }
 
+plugins {
+    id 'maven-publish'
+}
 
 // Apply the java plugin to add support for Java
 apply plugin: 'java'
@@ -40,4 +44,15 @@ dependencies {
     testCompile('org.assertj:assertj-core:3.6.2')
     testCompile('org.mockito:mockito-core:2.7.9')
     testCompile('junit:junit:4.4')
+}
+
+publishing {
+    publications {
+        maven(MavenPublication) {
+            groupId = 'com.bandwidth.sdk'
+            artifactId = 'numbers'
+            version = '0.1-SNAPSHOT'
+            from components.java
+        }
+    }
 }

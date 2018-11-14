@@ -8,9 +8,9 @@ import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlRootElement;
 import org.immutables.value.Value;
 
 @Value.Immutable
-@JacksonXmlRootElement(localName = "RateCenterSearchAndOrderType")
 @JsonSerialize(as = ImmutableRateCenterSearchAndOrderType.class)
 @JsonDeserialize(as = ImmutableRateCenterSearchAndOrderType.class)
+@JacksonXmlRootElement(localName = "RateCenterSearchAndOrderType")
 public abstract class RateCenterSearchAndOrderType implements Quantifiable {
 
    @JacksonXmlProperty(localName = "RateCenter")

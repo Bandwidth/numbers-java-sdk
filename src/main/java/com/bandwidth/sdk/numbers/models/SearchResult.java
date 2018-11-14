@@ -16,12 +16,12 @@ import java.util.List;
 @JsonDeserialize(as = ImmutableSearchResult.class)
 public abstract class SearchResult {
 
+   @Nullable
    @JacksonXmlProperty(localName = "Error")
-   @Nullable
-   public abstract com.bandwidth.sdk.numbers.models.Error getError();
+   public abstract ErrorResponse getError();
 
-   @JacksonXmlProperty(localName = "ResultCount")
    @Nullable
+   @JacksonXmlProperty(localName = "ResultCount")
    public abstract Integer getResultCount();
 
    @JacksonXmlElementWrapper(localName = "TelephoneNumberList")

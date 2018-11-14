@@ -11,9 +11,9 @@ import org.immutables.value.Value;
 import javax.annotation.Nullable;
 
 @Value.Immutable
-@JacksonXmlRootElement(localName = "AreaCodeSearchAndOrderType")
 @JsonSerialize(as = ImmutableAreaCodeSearchAndOrderType.class)
 @JsonDeserialize(as = ImmutableAreaCodeSearchAndOrderType.class)
+@JacksonXmlRootElement(localName = "AreaCodeSearchAndOrderType")
 public abstract class AreaCodeSearchAndOrderType implements Quantifiable {
 
    @Nullable

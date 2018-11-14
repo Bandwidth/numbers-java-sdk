@@ -1,6 +1,7 @@
 package com.bandwidth.sdk.numbers.models.orders;
 
 import com.bandwidth.sdk.numbers.models.Quantifiable;
+import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlElementWrapper;
@@ -11,9 +12,10 @@ import org.immutables.value.Value;
 import java.util.List;
 
 @Value.Immutable
-@JacksonXmlRootElement(localName = "ExistingTelephoneNumberOrderType")
 @JsonSerialize(as = ImmutableExistingTelephoneNumberOrderType.class)
 @JsonDeserialize(as = ImmutableExistingTelephoneNumberOrderType.class)
+@JsonInclude(JsonInclude.Include.NON_EMPTY)
+@JacksonXmlRootElement(localName = "ExistingTelephoneNumberOrderType")
 public abstract class ExistingTelephoneNumberOrderType implements Quantifiable {
 
    @JacksonXmlElementWrapper(localName = "TelephoneNumberList")

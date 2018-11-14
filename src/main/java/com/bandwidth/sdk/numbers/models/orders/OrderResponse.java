@@ -1,5 +1,6 @@
 package com.bandwidth.sdk.numbers.models.orders;
 
+import com.bandwidth.sdk.numbers.models.ErrorResponse;
 import com.bandwidth.sdk.numbers.models.TelephoneNumber;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
@@ -47,10 +48,17 @@ public abstract class OrderResponse {
    @JacksonXmlProperty(localName = "LastModifiedDate")
    public abstract Date lastModifiedDate();
 
+   @Nullable
    @JacksonXmlProperty(localName = "OrderStatus")
    public abstract String orderStatus();
 
    @JacksonXmlElementWrapper(localName = "CompletedNumbers")
    @JacksonXmlProperty(localName = "TelephoneNumber")
    public abstract List<TelephoneNumber> getTelephoneNumbers();
+
+   @Nullable
+   @JacksonXmlElementWrapper(localName = "ErrorList")
+   @JacksonXmlProperty(localName = "ErrorResponse")
+   public abstract List<ErrorResponse> getErrorList();
+
 }

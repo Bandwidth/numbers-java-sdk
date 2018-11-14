@@ -1,10 +1,10 @@
 package com.bandwidth.sdk.numbers;
 
 import com.bandwidth.sdk.numbers.exception.ExceptionUtils;
+import com.bandwidth.sdk.numbers.models.AvailableNumberSearchRequest;
 import com.bandwidth.sdk.numbers.models.SearchResult;
 import com.bandwidth.sdk.numbers.models.orders.Order;
 import com.bandwidth.sdk.numbers.models.orders.OrderResponse;
-import com.bandwidth.sdk.numbers.requests.AvailableNumberSearchRequest;
 import com.bandwidth.sdk.numbers.serde.NumbersSerde;
 import com.google.common.base.Preconditions;
 import io.netty.handler.codec.http.HttpHeaderNames;
@@ -22,13 +22,10 @@ import java.text.MessageFormat;
 import java.util.concurrent.CompletableFuture;
 
 import static com.bandwidth.sdk.numbers.exception.ExceptionUtils.catchAsyncClientExceptions;
-import static com.bandwidth.sdk.numbers.exception.NumbersServiceException.throwIfApiError;
 import static org.asynchttpclient.Dsl.asyncHttpClient;
 
-public class NumbersClientImpl implements NumbersClient {
+public class AsyncNumbersClient implements NumbersClient {
 
-   //TODO: Specify the real production base URL here
-   private static final String DEFAULT_BASE_URL = "TODO";
    private static final String X_REALM_HEADER_NAME = "x-realm";
    private static final String X_REALM_HEADER_VALUE = "admin";
 
@@ -44,8 +41,6 @@ public class NumbersClientImpl implements NumbersClient {
       }
    };
 
-   private static final DefaultAsyncHttpClientConfig DEFAULT_CONFIG = new DefaultAsyncHttpClientConfig.Builder().build();
-
    private final String account;
    private final String baseUrl;
    private final AsyncHttpClient httpClient;
@@ -57,7 +52,7 @@ public class NumbersClientImpl implements NumbersClient {
     * @param username Your username to login to dashboard.bandwidth.com
     * @param password Your password to login to dashboard.bandwidth.com
     */
-   private NumbersClientImpl(
+   private AsyncNumbersClient(
       String baseUrl,
       String account,
       String username,
@@ -81,7 +76,6 @@ public class NumbersClientImpl implements NumbersClient {
       return orderTelephoneNumbersAsync(order).join();
    }
 
-   @Override
    public CompletableFuture<OrderResponse> orderTelephoneNumbersAsync(Order order) {
       return catchAsyncClientExceptions(() -> {
          String url = MessageFormat.format("{0}/accounts/{1}/orders", baseUrl, account);
@@ -91,7 +85,6 @@ public class NumbersClientImpl implements NumbersClient {
             .execute()
             .toCompletableFuture()
             .thenApply(resp -> {
-               throwIfApiError(resp);
                String responseBodyString = resp.getResponseBody(StandardCharsets.UTF_8);
                return NumbersSerde.deserialize(responseBodyString, OrderResponse.class);
             });
@@ -103,7 +96,6 @@ public class NumbersClientImpl implements NumbersClient {
       return getAvailableTelephoneNumbersAsync(availableNumberSearchRequest).join();
    }
 
-   @Override
    public CompletableFuture<SearchResult> getAvailableTelephoneNumbersAsync(AvailableNumberSearchRequest availableNumberSearchRequest) {
       return ExceptionUtils.catchAsyncClientExceptions(() -> {
          String url = MessageFormat.format("{0}/accounts/{1}/availableNumbers", baseUrl, account);
@@ -112,7 +104,6 @@ public class NumbersClientImpl implements NumbersClient {
             .execute()
             .toCompletableFuture()
             .thenApply(resp -> {
-               throwIfApiError(resp);
                String responseBodyString = resp.getResponseBody(StandardCharsets.UTF_8);
                return NumbersSerde.deserialize(responseBodyString, SearchResult.class);
             });
@@ -124,14 +115,23 @@ public class NumbersClientImpl implements NumbersClient {
       this.httpClient.close();
    }
 
+   public static AsyncNumbersClient.Builder builder() {
+      return new AsyncNumbersClient.Builder();
+   }
+
    private static class Builder {
+
+      //TODO: Specify the real production base URL here
+      private static final String DEFAULT_BASE_URL = "TODO";
+      private static final DefaultAsyncHttpClientConfig DEFAULT_CONFIG = new DefaultAsyncHttpClientConfig.Builder().build();
+
       private String account;
       private String username;
       private String password;
       private String baseUrl;
       private AsyncHttpClientConfig config;
 
-      public Builder() {
+      private Builder() {
          this.baseUrl = DEFAULT_BASE_URL;
          this.config = DEFAULT_CONFIG;
       }
@@ -161,11 +161,11 @@ public class NumbersClientImpl implements NumbersClient {
          return this;
       }
 
-      public NumbersClientImpl build() {
+      public AsyncNumbersClient build() {
          Preconditions.checkNotNull(account, "An account must be specified!");
          Preconditions.checkNotNull(username, "A username must be specified!");
          Preconditions.checkNotNull(password, "A password must be specified!");
-         return new NumbersClientImpl(baseUrl, account, username, password, config);
+         return new AsyncNumbersClient(baseUrl, account, username, password, config);
       }
    }
 }
