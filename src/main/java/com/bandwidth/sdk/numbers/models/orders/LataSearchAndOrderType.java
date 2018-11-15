@@ -16,7 +16,7 @@ import javax.annotation.Nullable;
 public abstract class LataSearchAndOrderType implements Quantifiable {
 
    @Nullable
-   @JacksonXmlProperty(localName = "Lata")
+   @JacksonXmlProperty(localName = "LATA")
    public abstract String getLata();
 
    public static ImmutableLataSearchAndOrderType.Builder builder() {

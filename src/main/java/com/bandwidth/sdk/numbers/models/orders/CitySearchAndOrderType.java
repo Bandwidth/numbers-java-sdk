@@ -19,6 +19,10 @@ public abstract class CitySearchAndOrderType implements Quantifiable {
    @JacksonXmlProperty(localName = "City")
    public abstract String getCity();
 
+   @Nullable
+   @JacksonXmlProperty(localName = "State")
+   public abstract String getState();
+
    public static ImmutableCitySearchAndOrderType.Builder builder() {
       return ImmutableCitySearchAndOrderType.builder();
    }

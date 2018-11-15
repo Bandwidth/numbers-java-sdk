@@ -1,6 +1,6 @@
 package com.bandwidth.sdk.numbers.models.orders;
 
-import com.bandwidth.sdk.numbers.models.Quantifiable;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
@@ -12,14 +12,12 @@ import javax.annotation.Nullable;
 import java.util.Date;
 
 @Value.Immutable
+@JsonIgnoreProperties(ignoreUnknown = true)
 @JsonSerialize(as = ImmutableOrder.class)
 @JsonDeserialize(as = ImmutableOrder.class)
 @JsonInclude(JsonInclude.Include.NON_EMPTY)
 @JacksonXmlRootElement(localName = "Order")
-public abstract class Order implements Quantifiable {
-
-   @JacksonXmlProperty(localName = "Name")
-   public abstract String getName();
+public abstract class Order {
 
    @Nullable
    @JacksonXmlProperty(localName = "CustomerOrderId")
@@ -34,11 +32,9 @@ public abstract class Order implements Quantifiable {
 
    @Nullable
    @JacksonXmlProperty(localName = "PartialAllowed")
-   public abstract Boolean getPartialAllowed();
-
-   @Nullable
-   @JacksonXmlProperty(localName = "BackOrderRequested")
-   public abstract Boolean getBackOrderRequested();
+   public Boolean getPartialAllowed() {
+      return false;
+   }
 
    @Nullable
    @JacksonXmlProperty(localName = "OrderCreateDate")
@@ -95,4 +91,6 @@ public abstract class Order implements Quantifiable {
    public static ImmutableOrder.Builder builder() {
       return ImmutableOrder.builder();
    }
+
+
 }

@@ -20,7 +20,7 @@ import java.util.List;
 @JsonInclude(JsonInclude.Include.NON_EMPTY)
 @JacksonXmlRootElement(localName = "OrderResponse")
 public abstract class OrderResponse {
-   
+
    @JacksonXmlProperty(localName = "Order")
    public abstract Order getOrder();
 
@@ -38,19 +38,19 @@ public abstract class OrderResponse {
 
    @Nullable
    @JacksonXmlProperty(localName = "PendingQuantity")
-   public abstract Integer pendingQuantity();
+   public abstract Integer getPendingQuantity();
 
    @Nullable
-   @JacksonXmlProperty(localName = "OrderCompletedDate")
-   public abstract Date orderCompletedDate();
+   @JacksonXmlProperty(localName = "OrderCompleteDate")
+   public abstract Date getOrderCompleteDate();
 
    @Nullable
    @JacksonXmlProperty(localName = "LastModifiedDate")
-   public abstract Date lastModifiedDate();
+   public abstract Date getLastModifiedDate();
 
    @Nullable
    @JacksonXmlProperty(localName = "OrderStatus")
-   public abstract String orderStatus();
+   public abstract OrderStatus getOrderStatus();
 
    @JacksonXmlElementWrapper(localName = "CompletedNumbers")
    @JacksonXmlProperty(localName = "TelephoneNumber")
@@ -60,5 +60,24 @@ public abstract class OrderResponse {
    @JacksonXmlElementWrapper(localName = "ErrorList")
    @JacksonXmlProperty(localName = "ErrorResponse")
    public abstract List<ErrorResponse> getErrorList();
+
+   @JacksonXmlElementWrapper(localName = "FailedNumbers")
+   @JacksonXmlProperty(localName = "FullNumber")
+   public abstract List<String> getFailedNumbers();
+
+   @Nullable
+   @JacksonXmlProperty(localName = "Summary")
+   public abstract String getSummary();
+
+   public enum OrderStatus {
+      COMPLETE,
+      PARTIAL,
+      FAILED,
+      RECEIVED;
+
+      public boolean isTerminalStatus() {
+         return this == COMPLETE || this == PARTIAL || this == FAILED;
+      }
+   }
 
 }

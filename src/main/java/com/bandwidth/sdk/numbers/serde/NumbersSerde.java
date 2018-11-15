@@ -23,8 +23,6 @@ public class NumbersSerde {
    }
 
    public static <T> String serialize(T objectToMap) {
-      return catchClientExceptions(() -> {
-         return MAPPER.writeValueAsString(objectToMap);
-      });
+      return catchClientExceptions(() -> MAPPER.writeValueAsString(objectToMap));
    }
 }

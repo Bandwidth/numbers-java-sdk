@@ -1,6 +1,5 @@
 package com.bandwidth.sdk.numbers.models;
 
-import com.bandwidth.sdk.numbers.requests.ImmutableAvailableNumberSearchRequest;
 import com.bandwidth.sdk.numbers.serde.NumbersSerde;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
