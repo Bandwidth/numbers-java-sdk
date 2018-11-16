@@ -46,51 +46,11 @@ public class NumbersClientImpl implements NumbersClient {
    }
 
    @Override
-   public OrderResponse orderTelephoneNumbers(Order order) {
-      OrderResponse initialOrder = orderTelephoneNumbersAsync(order).join();
-
-      List<ErrorResponse> errorList = initialOrder.getErrorList();
-      if (errorList != null && !errorList.isEmpty()) {
-         throw ExceptionUtils.consolidateApiErrors(errorList);
-      }
-
-      return RetryableRequest.executeRequest(
-         () -> getOrderStatus(initialOrder.getOrder().getId()), OrderResponse::isTerminal, SLEEP_RETRY_POLICY);
-   }
-
-   public OrderResponse getOrderStatus(String orderId) {
-      String url = MessageFormat.format("{0}/accounts/{1}/orders/{2}", baseUrl, account, orderId);
-      return httpClient.prepareGet(url)
-         .execute()
-         .toCompletableFuture()
-         .thenApply(resp -> {
-            String responseBodyString = resp.getResponseBody(StandardCharsets.UTF_8);
-            return NumbersSerde.deserialize(responseBodyString, OrderResponse.class);
-         })
-         .join();
-   }
-
-   public CompletableFuture<OrderResponse> orderTelephoneNumbersAsync(Order order) {
-      return catchAsyncClientExceptions(() -> {
-         String url = MessageFormat.format("{0}/accounts/{1}/orders", baseUrl, account);
-         return httpClient.preparePost(url)
-            .setHeader(HttpHeaderNames.CONTENT_TYPE, "application/xml")
-            .setBody(NumbersSerde.serialize(order))
-            .execute()
-            .toCompletableFuture()
-            .thenApply(resp -> {
-               String responseBodyString = resp.getResponseBody(StandardCharsets.UTF_8);
-               return NumbersSerde.deserialize(responseBodyString, OrderResponse.class);
-            });
-      });
-   }
-
-   @Override
    public SearchResult getAvailableTelephoneNumbers(AvailableNumberSearchRequest availableNumberSearchRequest) {
       return getAvailableTelephoneNumbersAsync(availableNumberSearchRequest).join();
    }
 
-   public CompletableFuture<SearchResult> getAvailableTelephoneNumbersAsync(AvailableNumberSearchRequest availableNumberSearchRequest) {
+   private CompletableFuture<SearchResult> getAvailableTelephoneNumbersAsync(AvailableNumberSearchRequest availableNumberSearchRequest) {
       return ExceptionUtils.catchAsyncClientExceptions(() -> {
          String url = MessageFormat.format("{0}/accounts/{1}/availableNumbers", baseUrl, account);
          return httpClient.prepareGet(url)
@@ -105,8 +65,52 @@ public class NumbersClientImpl implements NumbersClient {
    }
 
    @Override
-   public void close() throws IOException {
-      this.httpClient.close();
+   public OrderResponse orderTelephoneNumbers(Order order) {
+      OrderResponse initialOrder = orderTelephoneNumbersAsync(order).join();
+
+      List<ErrorResponse> errorList = initialOrder.getErrorList();
+      if (errorList != null && !errorList.isEmpty()) {
+         throw ExceptionUtils.consolidateApiErrors(errorList);
+      }
+
+      return RetryableRequest.executeRequest(
+         () -> getOrderStatus(initialOrder.getOrder().getId()), OrderResponse::isTerminal, SLEEP_RETRY_POLICY);
+   }
+
+   private CompletableFuture<OrderResponse> orderTelephoneNumbersAsync(Order order) {
+      return catchAsyncClientExceptions(() -> {
+         String url = MessageFormat.format("{0}/accounts/{1}/orders", baseUrl, account);
+         return httpClient.preparePost(url)
+            .setHeader(HttpHeaderNames.CONTENT_TYPE, "application/xml")
+            .setBody(NumbersSerde.serialize(order))
+            .execute()
+            .toCompletableFuture()
+            .thenApply(resp -> {
+               String responseBodyString = resp.getResponseBody(StandardCharsets.UTF_8);
+               return NumbersSerde.deserialize(responseBodyString, OrderResponse.class);
+            });
+      });
+   }
+
+   private OrderResponse getOrderStatus(String orderId) {
+      String url = MessageFormat.format("{0}/accounts/{1}/orders/{2}", baseUrl, account, orderId);
+      return httpClient.prepareGet(url)
+         .execute()
+         .toCompletableFuture()
+         .thenApply(resp -> {
+            String responseBodyString = resp.getResponseBody(StandardCharsets.UTF_8);
+            return NumbersSerde.deserialize(responseBodyString, OrderResponse.class);
+         })
+         .join();
+   }
+
+   @Override
+   public void close() {
+      try {
+         this.httpClient.close();
+      } catch (IOException e) {
+         throw new RuntimeException(e);
+      }
    }
 
    public static NumbersClientImpl.Builder builder() {
