@@ -113,7 +113,7 @@ public class NumbersClientImpl implements NumbersClient {
       return new NumbersClientImpl.Builder();
    }
 
-   private static class Builder {
+   public static class Builder {
 
       private static final String X_REALM_HEADER_NAME = "x-realm";
       private static final String X_REALM_HEADER_VALUE = "admin";
@@ -130,8 +130,7 @@ public class NumbersClientImpl implements NumbersClient {
          }
       };
 
-      //TODO: Specify the real production base URL here
-      private static final String DEFAULT_BASE_URL = "TODO";
+      private static final String DEFAULT_BASE_URL = "https://dashboard.bandwidth.com/api";
       private static final DefaultAsyncHttpClientConfig DEFAULT_CONFIG = new DefaultAsyncHttpClientConfig.Builder().build();
 
       private String account;
