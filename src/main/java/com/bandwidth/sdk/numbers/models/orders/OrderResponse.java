@@ -80,4 +80,9 @@ public abstract class OrderResponse {
       }
    }
 
+   public boolean isTerminal() {
+      OrderStatus orderStatus = getOrderStatus();
+      return orderStatus != null && orderStatus.isTerminalStatus();
+   }
+
 }

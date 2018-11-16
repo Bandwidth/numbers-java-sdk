@@ -1,6 +1,8 @@
 package com.bandwidth.sdk.numbers;
 
 import com.bandwidth.sdk.numbers.exception.ExceptionUtils;
+import com.bandwidth.sdk.numbers.helpers.RetryableRequest;
+import com.bandwidth.sdk.numbers.helpers.SleepRetryPolicy;
 import com.bandwidth.sdk.numbers.models.AvailableNumberSearchRequest;
 import com.bandwidth.sdk.numbers.models.ErrorResponse;
 import com.bandwidth.sdk.numbers.models.SearchResult;
@@ -28,6 +30,8 @@ import static org.asynchttpclient.Dsl.asyncHttpClient;
 
 public class NumbersClientImpl implements NumbersClient {
 
+   private static final SleepRetryPolicy SLEEP_RETRY_POLICY = new SleepRetryPolicy();
+
    private final String account;
    private final String baseUrl;
    private final AsyncHttpClient httpClient;
@@ -50,8 +54,8 @@ public class NumbersClientImpl implements NumbersClient {
          throw ExceptionUtils.consolidateApiErrors(errorList);
       }
 
-      return RetryableRequest.execute(() -> getOrderStatus(initialOrder.getOrder().getId()),
-         orderResponse -> orderResponse.getOrderStatus().isTerminalStatus());
+      return RetryableRequest.executeRequest(
+         () -> getOrderStatus(initialOrder.getOrder().getId()), OrderResponse::isTerminal, SLEEP_RETRY_POLICY);
    }
 
    public OrderResponse getOrderStatus(String orderId) {
@@ -119,7 +123,7 @@ public class NumbersClientImpl implements NumbersClient {
        */
       private static final RequestFilter REALM_HEADER_FILTER = new RequestFilter() {
          @Override
-         public <T> FilterContext<T> filter(final FilterContext<T> ctx) {
+         public <T> FilterContext<T> filter(FilterContext<T> ctx) {
             final HttpHeaders headers = ctx.getRequest().getHeaders();
             headers.add(X_REALM_HEADER_NAME, X_REALM_HEADER_VALUE);
             return ctx;
