@@ -13,8 +13,8 @@ import org.immutables.value.Value;
 @JacksonXmlRootElement(localName = "TollFreeWildCharSearchAndOrderType")
 public abstract class TollFreeWildCharSearchAndOrderType implements Quantifiable {
 
-   @JacksonXmlProperty(localName = "TollFreeWildCharPattern")
-   public abstract String getTollFreeWildCharPattern();
+   @JacksonXmlProperty(localName = "TollFreeWildCardPattern")
+   public abstract String getTollFreeWildCardPattern();
 
    public static ImmutableTollFreeWildCharSearchAndOrderType.Builder builder() {
       return ImmutableTollFreeWildCharSearchAndOrderType.builder();
