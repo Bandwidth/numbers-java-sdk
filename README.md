@@ -1,6 +1,6 @@
 # Bandwidth Numbers Java SDK
 
-Java SDK for Bandwidth's number management.
+Java SDK for Bandwidth's number management API.
 
 ## Dependency
 
@@ -20,6 +20,8 @@ compile 'com.bandwidth.sdk:numbers:(put desired version here)'
 
 
 ## Quick Start
+
+All objects in the SDK follow the Builder pattern for easy construction. To search for and order numbers, construct the relevant request and pass it to the appropriate client method.
 
 ### Construct the client
 ```java
@@ -60,7 +62,7 @@ ExistingTelephoneNumberOrderType existingTelephoneNumberOrderType = ExistingTele
    .addTelephoneNumberList("8042994451")
    .build();
 
-// Wrap the order type in an Order wrapper and choose site id and peer for numbers to associated with
+// Wrap the order type in an Order wrapper and choose site id and peer for numbers to be associated with
 Order order = Order.builder()
    .siteId("1")
    .peerId("500539")
