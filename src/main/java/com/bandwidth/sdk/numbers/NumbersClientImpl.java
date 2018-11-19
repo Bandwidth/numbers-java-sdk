@@ -4,7 +4,6 @@ import com.bandwidth.sdk.numbers.exception.ExceptionUtils;
 import com.bandwidth.sdk.numbers.helpers.RetryableRequest;
 import com.bandwidth.sdk.numbers.helpers.SleepRetryPolicy;
 import com.bandwidth.sdk.numbers.models.AvailableNumberSearchRequest;
-import com.bandwidth.sdk.numbers.models.ErrorResponse;
 import com.bandwidth.sdk.numbers.models.SearchResult;
 import com.bandwidth.sdk.numbers.models.orders.Order;
 import com.bandwidth.sdk.numbers.models.orders.OrderResponse;
@@ -22,10 +21,10 @@ import org.asynchttpclient.filter.RequestFilter;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.text.MessageFormat;
-import java.util.List;
 import java.util.concurrent.CompletableFuture;
 
 import static com.bandwidth.sdk.numbers.exception.ExceptionUtils.catchAsyncClientExceptions;
+import static com.bandwidth.sdk.numbers.exception.ExceptionUtils.validateOrderResponse;
 import static org.asynchttpclient.Dsl.asyncHttpClient;
 
 public class NumbersClientImpl implements NumbersClient {
@@ -66,15 +65,12 @@ public class NumbersClientImpl implements NumbersClient {
 
    @Override
    public OrderResponse orderTelephoneNumbers(Order order) {
-      OrderResponse initialOrder = orderTelephoneNumbersAsync(order).join();
-
-      List<ErrorResponse> errorList = initialOrder.getErrorList();
-      if (errorList != null && !errorList.isEmpty()) {
-         throw ExceptionUtils.consolidateApiErrors(errorList);
-      }
+      OrderResponse initialOrder = validateOrderResponse(() -> orderTelephoneNumbersAsync(order).join());
 
       return RetryableRequest.executeRequest(
-         () -> getOrderStatus(initialOrder.getOrder().getId()), OrderResponse::isTerminal, SLEEP_RETRY_POLICY);
+         () -> getOrderStatus(initialOrder.getOrder().getId()),
+         OrderResponse::isTerminal,
+         SLEEP_RETRY_POLICY);
    }
 
    private CompletableFuture<OrderResponse> orderTelephoneNumbersAsync(Order order) {
@@ -93,15 +89,17 @@ public class NumbersClientImpl implements NumbersClient {
    }
 
    private OrderResponse getOrderStatus(String orderId) {
-      String url = MessageFormat.format("{0}/accounts/{1}/orders/{2}", baseUrl, account, orderId);
-      return httpClient.prepareGet(url)
-         .execute()
-         .toCompletableFuture()
-         .thenApply(resp -> {
-            String responseBodyString = resp.getResponseBody(StandardCharsets.UTF_8);
-            return NumbersSerde.deserialize(responseBodyString, OrderResponse.class);
-         })
-         .join();
+      return validateOrderResponse(() -> {
+         String url = MessageFormat.format("{0}/accounts/{1}/orders/{2}", baseUrl, account, orderId);
+         return httpClient.prepareGet(url)
+            .execute()
+            .toCompletableFuture()
+            .thenApply(resp -> {
+               String responseBodyString = resp.getResponseBody(StandardCharsets.UTF_8);
+               return NumbersSerde.deserialize(responseBodyString, OrderResponse.class);
+            })
+            .join();
+      });
    }
 
    @Override
@@ -128,7 +126,7 @@ public class NumbersClientImpl implements NumbersClient {
       private static final RequestFilter REALM_HEADER_FILTER = new RequestFilter() {
          @Override
          public <T> FilterContext<T> filter(FilterContext<T> ctx) {
-            final HttpHeaders headers = ctx.getRequest().getHeaders();
+            HttpHeaders headers = ctx.getRequest().getHeaders();
             headers.add(X_REALM_HEADER_NAME, X_REALM_HEADER_VALUE);
             return ctx;
          }

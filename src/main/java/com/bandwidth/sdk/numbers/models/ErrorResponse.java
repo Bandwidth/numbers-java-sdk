@@ -12,9 +12,15 @@ import org.immutables.value.Value;
 @JsonDeserialize(as = ImmutableErrorResponse.class)
 public abstract class ErrorResponse {
 
+   private static final String ORDER_PENDING_ERROR_CODE = "5019";
+
    @JacksonXmlProperty(localName = "Code")
    public abstract String getCode();
    @JacksonXmlProperty(localName = "Description")
    public abstract String getDescription();
+
+   public boolean isOrderPendingError() {
+      return getCode().equals(ORDER_PENDING_ERROR_CODE);
+   }
 
 }

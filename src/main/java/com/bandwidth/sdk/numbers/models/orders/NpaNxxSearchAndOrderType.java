@@ -24,7 +24,10 @@ public abstract class NpaNxxSearchAndOrderType implements Quantifiable {
 
    @Nullable
    @JacksonXmlProperty(localName = "EnableLCA")
-   public abstract Boolean getEnableLCA();
+   @Value.Default
+   public Boolean getEnableLca() {
+      return false;
+   }
 
    public static ImmutableNpaNxxSearchAndOrderType.Builder builder() {
       return ImmutableNpaNxxSearchAndOrderType.builder();

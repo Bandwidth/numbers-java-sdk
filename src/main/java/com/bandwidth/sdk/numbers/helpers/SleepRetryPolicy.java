@@ -8,8 +8,8 @@ public class SleepRetryPolicy implements RetryPolicy {
       new long[] { 100, 100, 200, 300, 500, 800, 1300, 2100, 3400, 5500, 8900, 14400 };
 
    @Override
-   public void doRetry(final int retryAttempt) {
-      if (retryAttempt > BACKOFF_SEQUENCE.length) {
+   public void doRetry(int retryAttempt) {
+      if (retryAttempt >= BACKOFF_SEQUENCE.length) {
          throw new NumbersClientException("Request failed!");
       }
 
