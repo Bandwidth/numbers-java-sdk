@@ -1,6 +1,5 @@
 package com.bandwidth.sdk.numbers.models.orders;
 
-import com.bandwidth.sdk.numbers.models.Quantifiable;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty;
@@ -13,11 +12,18 @@ import javax.annotation.Nullable;
 @JsonSerialize(as = ImmutableZipSearchAndOrderType.class)
 @JsonDeserialize(as = ImmutableZipSearchAndOrderType.class)
 @JacksonXmlRootElement(localName = "ZipSearchAndOrderType")
-public abstract class ZipSearchAndOrderType implements Quantifiable {
+public abstract class ZipSearchAndOrderType {
 
    @Nullable
    @JacksonXmlProperty(localName = "Zip")
    public abstract String getZip();
+
+   @Nullable
+   @Value.Default
+   @JacksonXmlProperty(localName = "Quantity")
+   public Integer getQuantity() {
+      return 1;
+   }
 
    public static ImmutableZipSearchAndOrderType.Builder builder() {
       return ImmutableZipSearchAndOrderType.builder();

@@ -1,6 +1,5 @@
 package com.bandwidth.sdk.numbers.models.orders;
 
-import com.bandwidth.sdk.numbers.models.Quantifiable;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
@@ -9,6 +8,7 @@ import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty;
 import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlRootElement;
 import org.immutables.value.Value;
 
+import javax.annotation.Nullable;
 import java.util.List;
 
 @Value.Immutable
@@ -16,7 +16,7 @@ import java.util.List;
 @JsonDeserialize(as = ImmutableExistingTelephoneNumberOrderType.class)
 @JsonInclude(JsonInclude.Include.NON_EMPTY)
 @JacksonXmlRootElement(localName = "ExistingTelephoneNumberOrderType")
-public abstract class ExistingTelephoneNumberOrderType implements Quantifiable {
+public abstract class ExistingTelephoneNumberOrderType {
 
    @JacksonXmlElementWrapper(localName = "TelephoneNumberList")
    @JacksonXmlProperty(localName = "TelephoneNumber")
@@ -25,6 +25,13 @@ public abstract class ExistingTelephoneNumberOrderType implements Quantifiable {
    @JacksonXmlElementWrapper(localName = "ReservationIdList")
    @JacksonXmlProperty(localName = "ReservationId")
    public abstract List<String> getReservationIdList();
+
+   @Nullable
+   @Value.Default
+   @JacksonXmlProperty(localName = "Quantity")
+   public Integer getQuantity() {
+      return 1;
+   }
 
    public static ImmutableExistingTelephoneNumberOrderType.Builder builder() {
       return ImmutableExistingTelephoneNumberOrderType.builder();

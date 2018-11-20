@@ -1,6 +1,5 @@
 package com.bandwidth.sdk.numbers.models.orders;
 
-import com.bandwidth.sdk.numbers.models.Quantifiable;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty;
@@ -13,11 +12,18 @@ import javax.annotation.Nullable;
 @JsonSerialize(as = ImmutableLataSearchAndOrderType.class)
 @JsonDeserialize(as = ImmutableLataSearchAndOrderType.class)
 @JacksonXmlRootElement(localName = "LataSearchAndOrderType")
-public abstract class LataSearchAndOrderType implements Quantifiable {
+public abstract class LataSearchAndOrderType {
 
    @Nullable
    @JacksonXmlProperty(localName = "LATA")
    public abstract String getLata();
+
+   @Nullable
+   @Value.Default
+   @JacksonXmlProperty(localName = "Quantity")
+   public Integer getQuantity() {
+      return 1;
+   }
 
    public static ImmutableLataSearchAndOrderType.Builder builder() {
       return ImmutableLataSearchAndOrderType.builder();

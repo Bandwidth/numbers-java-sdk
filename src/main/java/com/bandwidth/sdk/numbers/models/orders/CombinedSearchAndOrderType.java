@@ -1,6 +1,5 @@
 package com.bandwidth.sdk.numbers.models.orders;
 
-import com.bandwidth.sdk.numbers.models.Quantifiable;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
@@ -15,7 +14,7 @@ import javax.annotation.Nullable;
 @JsonDeserialize(as = ImmutableCombinedSearchAndOrderType.class)
 @JsonInclude(JsonInclude.Include.NON_EMPTY)
 @JacksonXmlRootElement(localName = "CombinedSearchAndOrderType")
-public abstract class CombinedSearchAndOrderType implements Quantifiable {
+public abstract class CombinedSearchAndOrderType {
 
    @Nullable
    @JacksonXmlProperty(localName = "AreaCode")
@@ -60,6 +59,13 @@ public abstract class CombinedSearchAndOrderType implements Quantifiable {
    @Nullable
    @JacksonXmlProperty(localName = "EnableLCA")
    public abstract Boolean getEnableLca();
+
+   @Nullable
+   @Value.Default
+   @JacksonXmlProperty(localName = "Quantity")
+   public Integer getQuantity() {
+      return 1;
+   }
 
    public static ImmutableCombinedSearchAndOrderType.Builder builder() {
       return ImmutableCombinedSearchAndOrderType.builder();

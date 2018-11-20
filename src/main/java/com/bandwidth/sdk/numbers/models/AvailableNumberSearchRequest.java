@@ -6,6 +6,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty;
 import org.asynchttpclient.Param;
 import org.immutables.value.Value;
 
@@ -18,7 +19,7 @@ import java.util.stream.Collectors;
 @JsonSerialize(as = ImmutableAvailableNumberSearchRequest.class)
 @JsonDeserialize(as = ImmutableAvailableNumberSearchRequest.class)
 @JsonInclude(JsonInclude.Include.NON_EMPTY)
-public abstract class AvailableNumberSearchRequest implements Quantifiable {
+public abstract class AvailableNumberSearchRequest {
 
    @Nullable
    public abstract String getAreaCode();
@@ -64,6 +65,13 @@ public abstract class AvailableNumberSearchRequest implements Quantifiable {
 
    @Nullable
    public abstract OrderBy getOrderBy();
+
+   @Nullable
+   @Value.Default
+   @JacksonXmlProperty(localName = "Quantity")
+   public Integer getQuantity() {
+      return 1;
+   }
 
    public static ImmutableAvailableNumberSearchRequest.Builder builder() {
       return ImmutableAvailableNumberSearchRequest.builder();

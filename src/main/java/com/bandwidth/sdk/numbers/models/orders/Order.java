@@ -20,6 +20,7 @@ import java.util.Date;
 public abstract class Order {
 
    @Nullable
+   @Value.Redacted
    @JacksonXmlProperty(localName = "CustomerOrderId")
    public abstract String getCustomerOrderId();
 
@@ -31,6 +32,7 @@ public abstract class Order {
    public abstract String getPeerId();
 
    @Nullable
+   @Value.Redacted
    @JacksonXmlProperty(localName = "PartialAllowed")
    public Boolean getPartialAllowed() {
       return false;
