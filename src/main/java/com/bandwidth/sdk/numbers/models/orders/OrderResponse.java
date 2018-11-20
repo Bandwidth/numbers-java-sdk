@@ -71,19 +71,25 @@ public abstract class OrderResponse {
    public abstract String getSummary();
 
    public enum OrderStatus {
-      COMPLETE,
-      PARTIAL,
-      FAILED,
-      RECEIVED;
+      COMPLETE(true),
+      PARTIAL(true),
+      FAILED(true),
+      RECEIVED(false);
 
-      public boolean isTerminalStatus() {
-         return this == COMPLETE || this == PARTIAL || this == FAILED;
+      private boolean isTerminal;
+
+      OrderStatus(boolean isTerminal) {
+         this.isTerminal = isTerminal;
+      }
+
+      public boolean isTerminal() {
+         return isTerminal;
       }
    }
 
    public boolean isTerminal() {
       OrderStatus orderStatus = getOrderStatus();
-      return orderStatus != null && orderStatus.isTerminalStatus();
+      return orderStatus != null && orderStatus.isTerminal();
    }
 
 }
