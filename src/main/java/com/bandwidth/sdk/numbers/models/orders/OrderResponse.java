@@ -59,6 +59,7 @@ public abstract class OrderResponse {
    @Nullable
    @JacksonXmlElementWrapper(localName = "ErrorList")
    @JacksonXmlProperty(localName = "ErrorResponse")
+   @Value.Redacted
    public abstract List<ErrorResponse> getErrorList();
 
    @JacksonXmlElementWrapper(localName = "FailedNumbers")

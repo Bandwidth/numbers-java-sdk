@@ -42,8 +42,12 @@ public class ExceptionUtils {
          return orderResponse;
       }
 
-      throw new NumbersApiException(Joiner.on(',').join(errorList.stream()
+      StringBuilder errorBuilder = new StringBuilder(Joiner.on(',').join(errorList.stream()
          .filter(errorResponse -> !errorResponse.isOrderPendingError())
          .collect(Collectors.toList())));
+
+      errorBuilder.append(", Order=").append(orderResponse.toString());
+
+      throw new NumbersApiException(errorBuilder.toString());
    }
 }

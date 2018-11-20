@@ -27,6 +27,9 @@ import static com.bandwidth.sdk.numbers.exception.ExceptionUtils.catchAsyncClien
 import static com.bandwidth.sdk.numbers.exception.ExceptionUtils.validateOrderResponse;
 import static org.asynchttpclient.Dsl.asyncHttpClient;
 
+/**
+ * @see NumbersClient
+ */
 public class NumbersClientImpl implements NumbersClient {
 
    private static final SleepRetryPolicy SLEEP_RETRY_POLICY = new SleepRetryPolicy();
@@ -35,7 +38,7 @@ public class NumbersClientImpl implements NumbersClient {
    private final String baseUrl;
    private final AsyncHttpClient httpClient;
 
-   private NumbersClientImpl(
+   NumbersClientImpl(
       String baseUrl,
       String account,
       AsyncHttpClient httpClient) {
@@ -121,7 +124,7 @@ public class NumbersClientImpl implements NumbersClient {
       private static final String X_REALM_HEADER_VALUE = "admin";
 
       /**
-       * {@link RequestFilter} that adds the required "x-realm: admin" header to all outbound requests
+       * {@link RequestFilter} that adds the required "x-realm: admin" header to all outbound requests.
        */
       private static final RequestFilter REALM_HEADER_FILTER = new RequestFilter() {
          @Override
@@ -146,26 +149,43 @@ public class NumbersClientImpl implements NumbersClient {
          this.config = DEFAULT_CONFIG;
       }
 
+      /**
+       * Mandatory. Specify the id for the account that the client will target.
+       */
       public Builder account(String account) {
          this.account = account;
          return this;
       }
 
+      /**
+       * Mandatory. Specify the username for the account that the client will target.
+       */
       public Builder username(String username) {
          this.username = username;
          return this;
       }
 
+      /**
+       * Mandatory. Specify the password for the account that the client will target.
+       */
       public Builder password(String password) {
          this.password = password;
          return this;
       }
 
+      /**
+       * Change the base URL to be something other than the Bandwidth Numbers production API. Only used for internal
+       * testing purposes.
+       */
       public Builder baseUrl(String baseUrl) {
          this.baseUrl = baseUrl;
          return this;
       }
 
+      /**
+       * Optional. Allows specifying a {@link AsyncHttpClientConfig} with custom settings. The passed configuration will
+       * be cloned and the necessary configuration for the Numbers client will be added.
+       */
       public Builder config(AsyncHttpClientConfig config) {
          this.config = config;
          return this;

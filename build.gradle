@@ -36,14 +36,14 @@ targetCompatibility = 1.8
 dependencies {
     apt 'org.immutables:value:2.5.6'
     compileOnly 'org.immutables:value:2.5.6:annotations'
-    compile 'com.fasterxml.jackson.datatype:jackson-datatype-jdk8:2.8.6'
-    compile 'org.asynchttpclient:async-http-client:2.6.0'
-    compile 'com.google.guava:guava:27.0-jre'
-    compile 'com.fasterxml.jackson.datatype:jackson-datatype-guava:2.9.5'
-    compile 'com.fasterxml.jackson.dataformat:jackson-dataformat-xml:2.9.4'
-    testCompile("org.assertj:assertj-core:3.11.1")
-    testCompile('org.mockito:mockito-core:2.7.9')
-    testCompile('junit:junit:4.4')
+    implementation 'com.fasterxml.jackson.datatype:jackson-datatype-jdk8:2.8.6'
+    implementation 'org.asynchttpclient:async-http-client:2.6.0'
+    implementation 'com.google.guava:guava:27.0-jre'
+    implementation 'com.fasterxml.jackson.datatype:jackson-datatype-guava:2.9.5'
+    implementation 'com.fasterxml.jackson.dataformat:jackson-dataformat-xml:2.9.4'
+    testImplementation("org.assertj:assertj-core:3.11.1")
+    testImplementation('org.mockito:mockito-core:2.23.0')
+    testImplementation group: 'junit', name: 'junit', version: '4.12'
 }
 
 publishing {
