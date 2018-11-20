@@ -5,10 +5,12 @@ import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlElementWrapper;
 import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty;
 import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlRootElement;
+import com.google.common.collect.ImmutableList;
 import org.immutables.value.Value;
 
 import javax.annotation.Nullable;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Value.Immutable
 @JacksonXmlRootElement
@@ -31,4 +33,19 @@ public abstract class SearchResult {
    @JacksonXmlElementWrapper(localName = "TelephoneNumberDetailList")
    @JacksonXmlProperty(localName = "TelephoneNumberDetail")
    public abstract List<TelephoneNumberDetail> getTelephoneNumberDetailList();
+
+   public List<String> extractTelephoneNumbers() {
+
+      if (getResultCount() != null && getResultCount() == 0) {
+         return ImmutableList.of();
+      }
+
+      if (getTelephoneNumberDetailList().isEmpty()) {
+         return ImmutableList.copyOf(getTelephoneNumberList());
+      }
+
+      return ImmutableList.copyOf(getTelephoneNumberDetailList().stream()
+         .map(TelephoneNumberDetail::getFullNumber)
+         .collect(Collectors.toList()));
+   }
 }

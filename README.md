@@ -21,9 +21,17 @@ compile 'com.bandwidth.sdk:numbers:(put desired version here)'
 
 ## Quick Start
 
-All objects in the SDK follow the Builder pattern for easy construction. To search for and order numbers, construct the relevant request and pass it to the appropriate client method.
+All objects in the SDK follow the Builder pattern for easy construction. To search for and order numbers, construct the 
+relevant request and pass it to the appropriate client method.
 
 ### Construct the client
+Instances of the NumbersClient must be closed, typically on application shutdown to avoid resource leaks. Use the 
+provided close method. The client also implements the AutoClosable interface for convenient use in try-with-resources 
+blocks.
+
+The client builder exposes a configuration method that allows access to the underlying AsyncHttpClient configuration
+should you want to configure it. See the [documentation](https://github.com/AsyncHttpClient/async-http-client) for that 
+project to see what can be configured.
 ```java
 NumbersClientImpl numbersClient = NumbersClientImpl.builder()
    .account("1")
@@ -56,6 +64,9 @@ SearchResult searchResult = numbersClient.getAvailableTelephoneNumbers(available
 ```
 
 ### Place an order for telephone numbers
+Placing an order is a synchronous operation that will submit an order request to bandwidth and poll until the order has 
+completed behind the scenes. One invocation may result in several API calls in the background before control returns to 
+the calling thread.
 ```java
 // Each order type has a separate implementation
 ExistingTelephoneNumberOrderType existingTelephoneNumberOrderType = ExistingTelephoneNumberOrderType.builder()

@@ -8,7 +8,6 @@ import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty;
 import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlRootElement;
 import org.immutables.value.Value;
 
-import javax.annotation.Nullable;
 import java.util.List;
 
 @Value.Immutable
@@ -25,13 +24,6 @@ public abstract class ExistingTelephoneNumberOrderType {
    @JacksonXmlElementWrapper(localName = "ReservationIdList")
    @JacksonXmlProperty(localName = "ReservationId")
    public abstract List<String> getReservationIdList();
-
-   @Nullable
-   @Value.Default
-   @JacksonXmlProperty(localName = "Quantity")
-   public Integer getQuantity() {
-      return 1;
-   }
 
    public static ImmutableExistingTelephoneNumberOrderType.Builder builder() {
       return ImmutableExistingTelephoneNumberOrderType.builder();

@@ -122,6 +122,7 @@ public class NumbersClientImpl implements NumbersClient {
 
       private static final String X_REALM_HEADER_NAME = "x-realm";
       private static final String X_REALM_HEADER_VALUE = "admin";
+      private static final String USER_AGENT_HEADER_VALUE = "numbers-java-sdk";
 
       /**
        * {@link RequestFilter} that adds the required "x-realm: admin" header to all outbound requests.
@@ -131,6 +132,15 @@ public class NumbersClientImpl implements NumbersClient {
          public <T> FilterContext<T> filter(FilterContext<T> ctx) {
             HttpHeaders headers = ctx.getRequest().getHeaders();
             headers.add(X_REALM_HEADER_NAME, X_REALM_HEADER_VALUE);
+            return ctx;
+         }
+      };
+
+      private static final RequestFilter USER_AGENT_FILTER = new RequestFilter() {
+         @Override
+         public <T> FilterContext<T> filter(FilterContext<T> ctx) {
+            HttpHeaders headers = ctx.getRequest().getHeaders();
+            headers.add(HttpHeaderNames.USER_AGENT, USER_AGENT_HEADER_VALUE);
             return ctx;
          }
       };
@@ -201,6 +211,7 @@ public class NumbersClientImpl implements NumbersClient {
                .setUsePreemptiveAuth(true)
                .setScheme(Realm.AuthScheme.BASIC))
             .addRequestFilter(REALM_HEADER_FILTER)
+            .addRequestFilter(USER_AGENT_FILTER)
             .build();
 
          return new NumbersClientImpl(baseUrl, account, asyncHttpClient(httpClientConfig));

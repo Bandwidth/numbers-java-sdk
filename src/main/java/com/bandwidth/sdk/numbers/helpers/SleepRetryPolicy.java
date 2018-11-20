@@ -10,7 +10,7 @@ public class SleepRetryPolicy implements RetryPolicy {
    @Override
    public void doRetry(int retryAttempt) {
       if (retryAttempt >= BACKOFF_SEQUENCE.length) {
-         throw new NumbersClientException("Request failed!");
+         throw new NumbersClientException("Request timed out.");
       }
 
       try {
