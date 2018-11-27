@@ -1,5 +1,6 @@
 package com.bandwidth.sdk.numbers.models;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty;
@@ -19,6 +20,7 @@ public abstract class ErrorResponse {
    @JacksonXmlProperty(localName = "Description")
    public abstract String getDescription();
 
+   @JsonIgnore
    public boolean isOrderPendingError() {
       return getCode().equals(ORDER_PENDING_ERROR_CODE);
    }

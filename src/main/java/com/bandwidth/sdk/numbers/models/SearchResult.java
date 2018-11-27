@@ -1,5 +1,6 @@
 package com.bandwidth.sdk.numbers.models;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlElementWrapper;
@@ -34,6 +35,11 @@ public abstract class SearchResult {
    @JacksonXmlProperty(localName = "TelephoneNumberDetail")
    public abstract List<TelephoneNumberDetail> getTelephoneNumberDetailList();
 
+   /**
+    * Convenience method which extracts a list of telephone regardless of whether enableTNDetail is enabled
+    * @return a List of all telephone numbers in the result
+    */
+   @JsonIgnore
    public List<String> extractTelephoneNumbers() {
 
       if (getResultCount() != null && getResultCount() == 0) {
