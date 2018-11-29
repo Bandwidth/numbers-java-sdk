@@ -2,6 +2,7 @@ package com.bandwidth.sdk.numbers.models.orders;
 
 import com.bandwidth.sdk.numbers.models.ErrorResponse;
 import com.bandwidth.sdk.numbers.models.TelephoneNumber;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
@@ -87,6 +88,7 @@ public abstract class OrderResponse {
       }
    }
 
+   @JsonIgnore
    public boolean isTerminal() {
       OrderStatus orderStatus = getOrderStatus();
       return orderStatus != null && orderStatus.isTerminal();
