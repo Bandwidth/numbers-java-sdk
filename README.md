@@ -2,6 +2,12 @@
 
 Java SDK for Bandwidth's number management API.
 
+## Release Notes
+
+| Version | Notes |
+|:---|:---|
+| 0.6.0  | Fixed `quantity` and `tollFreeWildCardPattern` for search requests |
+
 ## Dependency
 
 ### Maven
@@ -58,6 +64,7 @@ AvailableNumberSearchRequest availableNumberSearchRequest = AvailableNumberSearc
    .city("CARY")
    .enableTNDetail(false)
    .quantity(10)
+   .tollFreeWildCardPattern("8**")
    .build();
 
 SearchResult searchResult = numbersClient.getAvailableTelephoneNumbers(availableNumberSearchRequest);
