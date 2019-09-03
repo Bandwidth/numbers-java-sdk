@@ -52,7 +52,7 @@ public abstract class AvailableNumberSearchRequest {
    public abstract String getTollFreeVanity();
 
    @Nullable
-   public abstract String getTollFreeVanityWildCardPattern();
+   public abstract String getTollFreeWildCardPattern();
 
    @Nullable
    public abstract Boolean getEnableTNDetail();
@@ -67,11 +67,7 @@ public abstract class AvailableNumberSearchRequest {
    public abstract OrderBy getOrderBy();
 
    @Nullable
-   @Value.Default
-   @JacksonXmlProperty(localName = "Quantity")
-   public Integer getQuantity() {
-      return 1;
-   }
+   public abstract Integer getQuantity();
 
    public static ImmutableAvailableNumberSearchRequest.Builder builder() {
       return ImmutableAvailableNumberSearchRequest.builder();
