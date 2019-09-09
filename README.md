@@ -6,7 +6,7 @@ Java SDK for Bandwidth's number management API.
 
 | Version | Notes |
 |:---|:---|
-| 0.2.0  | Fixed `quantity` and `tollFreeWildCardPattern` for search requests |
+| 0.3.0  | Fixed `quantity` and `tollFreeWildCardPattern` for search requests |
 
 ## Dependency
 
