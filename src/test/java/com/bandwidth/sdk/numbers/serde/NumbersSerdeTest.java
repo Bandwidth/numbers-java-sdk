@@ -12,6 +12,8 @@ public class NumbersSerdeTest {
    private AvailableNumberSearchRequest availableNumberSearchRequest = AvailableNumberSearchRequest.builder()
       .city("RALEIGH")
       .state("NC")
+      .tollFreeWildCardPattern("8**")
+      .quantity(5)
       .enableTNDetail(true)
       .build();
 

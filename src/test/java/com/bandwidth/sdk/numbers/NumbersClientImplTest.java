@@ -43,6 +43,7 @@ public class NumbersClientImplTest {
       .state("NC")
       .city("RALEIGH")
       .quantity(5)
+      .tollFreeWildCardPattern("8**")
       .build();
 
    private SearchResult searchResult = ImmutableSearchResult.builder()
