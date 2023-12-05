@@ -1,5 +1,6 @@
 package com.bandwidth.sdk.numbers.models;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty;
@@ -60,5 +61,3 @@ public abstract class TelephoneNumber {
    @JacksonXmlProperty(localName = "LastModifiedDate")
    public abstract Date getLastModifiedDate();
 }
-
-
