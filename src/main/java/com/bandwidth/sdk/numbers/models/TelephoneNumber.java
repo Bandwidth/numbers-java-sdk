@@ -13,6 +13,7 @@ import java.util.Date;
 @JacksonXmlRootElement
 @JsonSerialize(as = ImmutableTelephoneNumber.class)
 @JsonDeserialize(as = ImmutableTelephoneNumber.class)
+@JsonIgnoreProperties(ignoreUnknown = true)
 public abstract class TelephoneNumber {
 
    @Nullable

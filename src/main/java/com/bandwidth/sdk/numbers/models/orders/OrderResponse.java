@@ -20,6 +20,7 @@ import java.util.List;
 @JsonDeserialize(as = ImmutableOrderResponse.class)
 @JsonInclude(JsonInclude.Include.NON_EMPTY)
 @JacksonXmlRootElement(localName = "OrderResponse")
+@JsonIgnoreProperties(ignoreUnknown = true)
 public abstract class OrderResponse {
 
    @JacksonXmlProperty(localName = "Order")
