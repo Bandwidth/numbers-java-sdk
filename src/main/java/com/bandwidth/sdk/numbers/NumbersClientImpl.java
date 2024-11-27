@@ -91,7 +91,7 @@ public class NumbersClientImpl implements NumbersClient {
       });
    }
 
-   private OrderResponse getOrderStatus(String orderId) {
+   public OrderResponse getOrderStatus(String orderId) {
       return validateOrderResponse(() -> {
          String url = MessageFormat.format("{0}/accounts/{1}/orders/{2}", baseUrl, account, orderId);
          return httpClient.prepareGet(url)
