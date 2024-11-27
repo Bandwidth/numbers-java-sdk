@@ -26,4 +26,12 @@ public interface NumbersClient extends AutoCloseable {
     * @return {@link OrderResponse} with the details of the results of placing the order
     */
    OrderResponse orderTelephoneNumbers(Order order);
+
+   /**
+    * Fetch the details of an order with the given order id.
+    *
+    * @param orderId The id of the order to check the status of
+    * @return {@link OrderResponse} with the details of the results of placing the order
+    */
+   OrderResponse getOrderStatus(String orderId);
 }
