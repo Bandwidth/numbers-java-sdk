@@ -1,12 +1,14 @@
 package com.bandwidth.sdk.numbers;
 
 import com.bandwidth.sdk.numbers.exception.ExceptionUtils;
+import com.bandwidth.sdk.numbers.exception.NumbersApiException;
 import com.bandwidth.sdk.numbers.helpers.RetryableRequest;
 import com.bandwidth.sdk.numbers.helpers.SleepRetryPolicy;
 import com.bandwidth.sdk.numbers.models.AvailableNumberSearchRequest;
 import com.bandwidth.sdk.numbers.models.SearchResult;
 import com.bandwidth.sdk.numbers.models.orders.Order;
 import com.bandwidth.sdk.numbers.models.orders.OrderResponse;
+import com.bandwidth.sdk.numbers.models.orders.OrdersResponse;
 import com.bandwidth.sdk.numbers.serde.NumbersSerde;
 import com.google.common.base.Preconditions;
 import io.netty.handler.codec.http.HttpHeaderNames;
@@ -102,6 +104,41 @@ public class NumbersClientImpl implements NumbersClient {
                return NumbersSerde.deserialize(responseBodyString, OrderResponse.class);
             })
             .join();
+      });
+   }
+
+   /**
+    * This queries the /orders API with a required parameter of customerOrderId
+    * If we need to extend this for any reason, we should implement a getOrders method with a builder for the possible query parameters
+    * The HTTP client will need to be investigated to see how it will support adding multiple query parameters
+    *
+    * @param customerOrderId The customerOrderId of the order to search on
+    * @return The orders response
+    */
+   @Override
+   public OrdersResponse getOrdersByCustomerOrderId(String customerOrderId){
+      return getOrdersByCustomerOrderIdAsync(customerOrderId).join();
+   }
+
+   private CompletableFuture<OrdersResponse> getOrdersByCustomerOrderIdAsync(String customerOrderId) throws NumbersApiException {
+      // arbitrary
+      String pageSize = "100";
+
+      return catchAsyncClientExceptions(() -> {
+         String url = MessageFormat.format("{0}/accounts/{1}/orders?customerOrderId={2}&page=1&size={3}", baseUrl, account, customerOrderId, pageSize);
+         return httpClient.prepareGet(url)
+            .execute()
+            .toCompletableFuture()
+            .thenApply(resp -> {
+               String responseBodyString = resp.getResponseBody(StandardCharsets.UTF_8);
+               if (resp.getStatusCode() != 200) {
+                  if (resp.getStatusCode() == 204) {
+                     throw new NumbersApiException("No orders found");
+                  }
+                  throw new NumbersApiException("Error fetching orders. Response body: " + responseBodyString + "; Status code: " + resp.getStatusCode());
+               }
+               return NumbersSerde.deserialize(responseBodyString, OrdersResponse.class);
+            });
       });
    }
 

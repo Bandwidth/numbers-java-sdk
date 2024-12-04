@@ -6,10 +6,7 @@ import com.bandwidth.sdk.numbers.models.AvailableNumberSearchRequest;
 import com.bandwidth.sdk.numbers.models.ImmutableErrorResponse;
 import com.bandwidth.sdk.numbers.models.ImmutableSearchResult;
 import com.bandwidth.sdk.numbers.models.SearchResult;
-import com.bandwidth.sdk.numbers.models.orders.ExistingTelephoneNumberOrderType;
-import com.bandwidth.sdk.numbers.models.orders.ImmutableOrderResponse;
-import com.bandwidth.sdk.numbers.models.orders.Order;
-import com.bandwidth.sdk.numbers.models.orders.OrderResponse;
+import com.bandwidth.sdk.numbers.models.orders.*;
 import com.bandwidth.sdk.numbers.serde.NumbersSerde;
 import org.assertj.core.api.Assertions;
 import org.asynchttpclient.AsyncHttpClient;
@@ -23,6 +20,7 @@ import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnitRunner;
 
 import java.nio.charset.StandardCharsets;
+import java.util.List;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.CompletionException;
 
@@ -78,6 +76,23 @@ public class NumbersClientImplTest {
          .description("error")
          .build())
       .order(order)
+      .build();
+
+   private final OrdersResponse ordersResponse = ImmutableOrdersResponse.builder()
+     .ordersResponseData(OrdersResponseWrapper.builder()
+          .addOrders(ImmutableOrdersResponseData.builder()
+             .accountId("1")
+             .countOfTns(1)
+             .customerOrderId("foo")
+             .userId("1")
+             .lastModifiedDate(null)
+             .orderDate(null)
+             .orderType("1")
+             .orderId("1")
+             .orderStatus(OrderResponse.OrderStatus.COMPLETE)
+             .summary("1")
+             .build())
+          .build())
       .build();
 
    @Mock
@@ -177,6 +192,45 @@ public class NumbersClientImplTest {
       Throwable thrown = Assertions.catchThrowable(() -> numbersClient.orderTelephoneNumbers(order));
 
       assertThat(thrown).isInstanceOf(NumbersApiException.class);
+   }
+
+   @Test
+   public void searchForNumberByCustomerOrderId() {
+      when(asyncHttpClient.prepareGet(anyString())).thenReturn(boundRequestBuilder);
+      when(boundRequestBuilder.execute()).thenReturn(listenableFuture);
+      when(listenableFuture.toCompletableFuture()).thenReturn(CompletableFuture.completedFuture(response));
+      when(response.getStatusCode()).thenReturn(200);
+      when(response.getResponseBody(StandardCharsets.UTF_8)).thenReturn(NumbersSerde.serialize(ordersResponse));
+
+      assertThat(ordersResponse).isEqualTo(numbersClient.getOrdersByCustomerOrderId("foo"));
+      List<OrdersResponseData> orders = ordersResponse.getOrdersResponseData().getOrders();
+      assertThat(orders).hasSize(1);
+      assertThat(orders.get(0).getCustomerOrderId()).isEqualTo("foo");
+      assertThat(orders.get(0).getOrderId()).isEqualTo("1");
+
+      verify(asyncHttpClient, times(1)).prepareGet(anyString());
+   }
+
+   @Test
+   public void searchForNumberByCustomerOrderIdNoOrdersFound() {
+      when(asyncHttpClient.prepareGet(anyString())).thenReturn(boundRequestBuilder);
+      when(boundRequestBuilder.execute()).thenReturn(listenableFuture);
+      when(listenableFuture.toCompletableFuture()).thenReturn(CompletableFuture.completedFuture(response));
+      when(response.getStatusCode()).thenReturn(204);
+
+      Throwable thrown = Assertions.catchThrowable(() -> numbersClient.getOrdersByCustomerOrderId("foo"));
+      assertThat(thrown).isInstanceOf(CompletionException.class).hasCauseInstanceOf(NumbersApiException.class);
+   }
+
+   @Test
+   public void searchForNumberByCustomerOrderIdRequestError() {
+      when(asyncHttpClient.prepareGet(anyString())).thenReturn(boundRequestBuilder);
+      when(boundRequestBuilder.execute()).thenReturn(listenableFuture);
+      when(listenableFuture.toCompletableFuture()).thenReturn(CompletableFuture.completedFuture(response));
+      when(response.getStatusCode()).thenReturn(400);
+
+      Throwable thrown = Assertions.catchThrowable(() -> numbersClient.getOrdersByCustomerOrderId("foo"));
+      assertThat(thrown).isInstanceOf(CompletionException.class).hasCauseInstanceOf(NumbersApiException.class);
    }
 
 }

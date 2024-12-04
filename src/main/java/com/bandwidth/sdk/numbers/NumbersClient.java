@@ -4,6 +4,7 @@ import com.bandwidth.sdk.numbers.models.SearchResult;
 import com.bandwidth.sdk.numbers.models.orders.Order;
 import com.bandwidth.sdk.numbers.models.orders.OrderResponse;
 import com.bandwidth.sdk.numbers.models.AvailableNumberSearchRequest;
+import com.bandwidth.sdk.numbers.models.orders.OrdersResponse;
 
 public interface NumbersClient extends AutoCloseable {
 
@@ -34,4 +35,12 @@ public interface NumbersClient extends AutoCloseable {
     * @return {@link OrderResponse} with the details of the results of placing the order
     */
    OrderResponse getOrderStatus(String orderId);
+
+   /**
+    * Fetch the details of all orders.
+    *
+    * @param customerOrderId The customerOrderId of the order to search on
+    * @return {@link OrdersResponse} with the details of all orders
+    */
+   OrdersResponse getOrdersByCustomerOrderId(String customerOrderId);
 }
