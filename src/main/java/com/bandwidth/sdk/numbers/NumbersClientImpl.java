@@ -107,6 +107,14 @@ public class NumbersClientImpl implements NumbersClient {
       });
    }
 
+   /**
+    * This queries the /orders API with a required parameter of customerOrderId
+    * If we need to extend this for any reason, we should implement a getOrders method with a builder for the possible query parameters
+    * The HTTP client will need to be investigated to see how it will support adding multiple query parameters
+    *
+    * @param customerOrderId The customerOrderId of the order to search on
+    * @return The orders response
+    */
    @Override
    public OrdersResponse getOrdersByCustomerOrderId(String customerOrderId){
       return getOrdersByCustomerOrderIdAsync(customerOrderId).join();
