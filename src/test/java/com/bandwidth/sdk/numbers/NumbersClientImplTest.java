@@ -89,7 +89,7 @@ public class NumbersClientImplTest {
              .orderDate(null)
              .orderType("1")
              .orderId("1")
-             .orderStatus("1")
+             .orderStatus(OrderResponse.OrderStatus.COMPLETE)
              .summary("1")
              .build())
           .build())

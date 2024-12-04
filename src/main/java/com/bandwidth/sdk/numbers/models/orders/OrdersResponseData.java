@@ -50,7 +50,7 @@ public abstract class OrdersResponseData {
 
     @Nullable
     @JacksonXmlProperty(localName = "OrderStatus")
-    public abstract String getOrderStatus();
+    public abstract OrderResponse.OrderStatus getOrderStatus();
 
     @Nullable
     @JacksonXmlProperty(localName = "Summary")
