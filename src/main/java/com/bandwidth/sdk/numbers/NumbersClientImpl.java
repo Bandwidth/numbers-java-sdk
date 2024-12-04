@@ -135,7 +135,7 @@ public class NumbersClientImpl implements NumbersClient {
                   if (resp.getStatusCode() == 204) {
                      throw new NumbersApiException("No orders found");
                   }
-                  throw new NumbersApiException("Error fetching orders: " + responseBodyString);
+                  throw new NumbersApiException("Error fetching orders. Response body: " + responseBodyString + "; Status code: " + resp.getStatusCode());
                }
                return NumbersSerde.deserialize(responseBodyString, OrdersResponse.class);
             });
