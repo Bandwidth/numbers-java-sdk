@@ -1,0 +1,11 @@
+apiVersion: backstage.io/v1alpha1
+kind: Location
+metadata:
+  schemaVersion: v1.0.0
+  name: numbers-java-sdk-location
+  description: Links to additional entities in the numbers-java-sdk repository.
+  annotations:
+    github.com/project-slug: Bandwidth/numbers-java-sdk
+spec:
+  targets:
+    - ./component.yaml
